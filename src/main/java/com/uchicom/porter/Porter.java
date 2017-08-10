@@ -18,12 +18,17 @@ public class Porter {
 		execute(port, host, port);
 	}
 	public void execute(int fromPort, String host, int port) {
+		execute("localhost", port, host, port);
+	}
+	public void execute(String fromHost, int fromPort, String host, int port) {
 		System.out.println("start");
 		try (ServerSocket fromServer = new ServerSocket();){
-			fromServer.bind(new InetSocketAddress("localhost", fromPort));
-			Socket fromSocket = fromServer.accept();
-			Socket toSocket = new Socket(host, port);
-			start(fromSocket, toSocket);
+			fromServer.bind(new InetSocketAddress(fromHost, fromPort));
+			while (fromServer.isBound()) {
+				Socket fromSocket = fromServer.accept();
+				Socket toSocket = new Socket(host, port);
+				start(fromSocket, toSocket);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -37,10 +42,9 @@ public class Porter {
 		remoteThrougher.start();
 		if (Constants.DEBUG) System.out.println("send起動");
 //
-//		Thread localThrougher = new Thread(new Througher(sendSocket, receiveSocket));
+		Thread localThrougher = new Thread(new Througher(sendSocket, receiveSocket));
 ////		localThrougher.setDaemon(true);
-//		localThrougher.start();
-		new Througher(sendSocket, receiveSocket).run();
+		localThrougher.start();
 		if (Constants.DEBUG) System.out.println("receive起動");
 		System.out.println("start end");
 	}
