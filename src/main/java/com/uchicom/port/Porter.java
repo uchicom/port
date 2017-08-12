@@ -1,10 +1,11 @@
 // (c) 2017 uchicom
-package com.uchicom.porter;
+package com.uchicom.port;
 
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import com.uchicom.port.dto.TransferDto;
 import com.uchicom.remon.Constants;
 import com.uchicom.remon.runnable.Througher;
 
@@ -14,6 +15,21 @@ import com.uchicom.remon.runnable.Througher;
  */
 public class Porter {
 
+	public void execute(TransferDto dto) {
+		System.out.println("start");
+		try (ServerSocket fromServer = new ServerSocket();){
+			fromServer.bind(dto.getFrom());
+			while (fromServer.isBound()) {
+				Socket fromSocket = fromServer.accept();
+				Socket toSocket = new Socket();
+				toSocket.connect(dto.getTo());
+				start(fromSocket, toSocket);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("end");
+	}
 	public void execute(String host, int port) {
 		execute(port, host, port);
 	}
