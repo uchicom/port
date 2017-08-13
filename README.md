@@ -1,6 +1,7 @@
 # porter
 ポート転送ツール
 java -jar porter.jar 転送パターン
+java -jar porter.jar -f 転送パターンファイル
 
 指定できるポート転送パターン
 対応
