@@ -61,7 +61,7 @@ public class Main {
 			System.out.println(arg);
 			InetSocketAddress from = null;
 			InetSocketAddress to = null;
-			String[] splits = arg.split(";");
+			String[] splits = arg.split("~");
 			if (splits.length == 1) {
 				String[] address = splits[0].split(":", -1);
 				if (address.length == 2) {
